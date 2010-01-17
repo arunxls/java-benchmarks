@@ -1,0 +1,171 @@
+
+<!-- saved from url=(0094)http://www2.epcc.ed.ac.uk/computing/research_activities/java_grande/threads/s3contents.html#md -->
+<HTML><HEAD><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<TITLE>Java Grande Benchmarking</TITLE>
+
+<!-- BEGIN HEADER epcc-1 -->
+</HEAD><BODY bgcolor="#ffffff" text="#313592" vlink="#e2465a" background="./Section 3 - Large Applications_files/backg1.jpg">
+
+<TABLE width="100%" cellpadding="0" cellspacing="0" border="0">
+<TBODY><TR>
+<TD align="left" valign="bottom">
+<A href="http://www.epcc.ed.ac.uk/">
+<IMG border="0" src="./Section 3 - Large Applications_files/epcc.gif"></A>
+</TD>
+<TD align="right" valign="bottom">
+<FONT size="6" face="Futura,Arial,Helvetica" color="#a51042"><B>
+
+The Java Grande Forum Multi-threaded Benchmarks
+
+</B></FONT>
+</TD>
+</TR>
+<TR>
+<TD colspan="2" bgcolor="#3300cc">
+<IMG width="2" height="2" src="./Section 3 - Large Applications_files/tr2x2.gif"></TD>
+</TR>
+</TBODY></TABLE>
+
+<!-- END HEADER epcc-1 -->
+<!-- BEGIN NAVIGATE -->
+<CENTER><FONT size="3">
+[<A href="http://www.epcc.ed.ac.uk/javagrande">Java Grande Benchmarking</A>]
+[<A href="http://www.epcc.ed.ac.uk/research">Research at EPCC</A>]
+</FONT></CENTER><BR>
+<!-- END NAVIGATE -->
+
+
+<H1><FONT color="#000000">Section 3: Large Applications</FONT></H1>
+
+The benchmarks are intended to be representative of Grande
+applications, suitably modified for inclusion in the benchmark suite
+by removing any I/O and graphical components.  For each benchmark, a
+small (size A) and large (size B) version is supplied. For each
+benchmark the time taken and a performance in operations per second
+(where the units are benchmark-specific) are reported.
+
+
+<H3 align="justify"><FONT color="#000000"><A name="md">MolDyn</A></FONT></H3>
+
+MolDyn is an N-body code modelling particles interacting under a Lennard-Jones 
+potential in a cubic spatial volume with periodic boundary conditions.
+Performance is reported in interactions per second. The number of particles
+is give by N. The original Fortran 77 code was written by Dieter Heerman,
+Institut für Theoretische Physik, Germany  and converted to Java by 
+Lorna Smith, EPCC.
+<P>
+
+The computationally intense component of the
+benchmark is the force calculation, which calculates the force on a
+particle in a pair wise manner. This involves an outer loop over all
+particles in the system and an inner loop ranging from the current
+particle number to the total number of particles. The outer loop has
+been parallelised by dividing the range of the iterations of the outer
+loop between the threads, in a cyclic manner to avoid load imbalance.
+A copy of the data structure containing the force updates is created on
+each thread.  Each thread accumulates force updates in its own copy.
+Once the force calculation is complete, these arrays are reduced to a
+single total force for each particles.
+</P><P>
+
+</P><CENTER>
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 2048  </TD> </TR>
+<TR> <TD>  B </TD> <TD> 8788  </TD> </TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+Source: <A href="http://www.epcc.ed.ac.uk/">EPCC</A> 
+</P><P>
+Author: Lorna Smith, EPCC.
+</P><P>
+Adapted by: Lorna Smith, EPCC.
+</P><P>
+Multi-threadeded version by: Lorna Smith, EPCC.
+
+</P><H3 align="justify"><FONT color="#000000"><A name="mc">MonteCarlo</A></FONT></H3>
+
+A financial simulation, using Monte Carlo techniques to price products
+derived from the price of an underlying asset. The code generates N sample
+time series with the same mean and fluctuation as a series of historical
+data. Performance is measured in samples per second.
+<P>
+The principle loop over number of Monte
+Carlo runs can be easily parallelised by dividing the work in a
+block fashion.
+</P><P>
+
+</P><CENTER>
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 2000  </TD> </TR>
+<TR> <TD>  B </TD> <TD> 60000  </TD> </TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+Source: <A href="http://www.epcc.ed.ac.uk/">EPCC</A> 
+</P><P>
+Author: Hon W Yau, EPCC.
+</P><P>
+Adapted by: Lorna Smith, EPCC.
+</P><P>
+Multi-threaded version by: Lorna Smith, EPCC.
+
+</P><H3 align="justify"><FONT color="#000000"><A name="raytracer">Ray Tracer</A></FONT></H3>
+
+This benchmark measures the performance of a 3D raytracer. The scene rendered 
+contains 64 spheres, and is rendered at a resolution of NxN pixels.
+The performance is measured in pixels per second.
+<P>
+The outermost loop (over rows of pixels) has been
+parallelised using a cyclic distribution for load balance.  Since the
+scene data is fairly small, a copy of the scene is created for each
+thread.  This allows optimisations in the serial code, principally the
+use of class variables for temporary storage, to be carried over to
+the parallel version.
+</P><P>
+</P><CENTER>
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 150  </TD> </TR>
+<TR> <TD>  B </TD> <TD> 500  </TD> </TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+Source: <A href="http://www-sop.inria.fr/sloop/C3D">C3D</A>
+</P><P>
+Author: Florian Doyon and Wilfried Klauser, INRIA. 
+</P><P>
+Adapted by: Mark Bull, EPCC.
+</P><P>
+Multi-threaded version by: Lorna Smith, EPCC.
+
+
+&nbsp;
+
+<TABLE width="100%" cellpadding="0" border="0">
+<TBODY><TR>
+<TD bgcolor="#3300cc"><IMG width="100" height="2" src="./Section 3 - Large Applications_files/tr2x2(1).gif"></TD>
+</TR>
+<TR>
+<TD>
+<A href="http://www.epcc.ed.ac.uk/">
+<IMG border="0" src="./Section 3 - Large Applications_files/epcc-small.gif" align="right">
+</A>
+<FONT size="3" face="Futura,Arial,Helvetica" color="#a51042">
+Webpage maintained by
+<I><A href="mailto:www@epcc.ed.ac.uk">www@epcc.ed.ac.uk</A></I>
+</FONT>
+</TD>
+</TR>
+<TR>
+<TD bgcolor="#3300cc"><IMG width="2" height="2" src="./Section 3 - Large Applications_files/tr2x2(1).gif"></TD>
+</TR>
+</TBODY></TABLE>
+
+
+
+
+
+</P></BODY></HTML>
