@@ -1,0 +1,118 @@
+
+<!-- saved from url=(0100)http://www2.epcc.ed.ac.uk/computing/research_activities/java_grande/threads/s1contents.html#forkjoin -->
+<HTML><HEAD><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<TITLE>Java Grande Benchmarking</TITLE>
+
+<!-- BEGIN HEADER epcc-1 -->
+</HEAD><BODY bgcolor="#ffffff" text="#313592" vlink="#e2465a" background="./Section 1 - Low Level Operations_files/backg1.jpg">
+
+<TABLE width="100%" cellpadding="0" cellspacing="0" border="0">
+<TBODY><TR>
+<TD align="left" valign="bottom">
+<A href="http://www.epcc.ed.ac.uk/">
+<IMG border="0" src="./Section 1 - Low Level Operations_files/epcc.gif"></A>
+</TD>
+<TD align="right" valign="bottom">
+<FONT size="6" face="Futura,Arial,Helvetica" color="#a51042"><B>
+
+The Java Grande Forum Multi-threaded Benchmarks
+
+</B></FONT>
+</TD>
+</TR>
+<TR>
+<TD colspan="2" bgcolor="#3300cc">
+<IMG width="2" height="2" src="./Section 1 - Low Level Operations_files/tr2x2.gif"></TD>
+</TR>
+</TBODY></TABLE>
+
+<!-- END HEADER epcc-1 -->
+<!-- BEGIN NAVIGATE -->
+<CENTER><FONT size="3">
+[<A href="http://www.epcc.ed.ac.uk/javagrande">Java Grande Benchmarking</A>]
+[<A href="http://www.epcc.ed.ac.uk/research">Research at EPCC</A>]
+</FONT></CENTER><BR>
+<!-- END NAVIGATE -->
+
+
+<H1><FONT color="#000000">Section 1: Low Level Operations</FONT></H1>
+
+
+The Section 1 benchmarks are designed to test the performance of the
+low-level operations which will ultimately determine the performance
+of real multi-threaded applications running under the Java environment. These
+benchmarks are designed to run for a fixed period of time: the number
+of operations executed in that time is recorded, and the performance
+reported as operations/second.
+
+<H3 align="justify"><FONT color="#000000"><A name="forkjoin">ForkJoin</A></FONT></H3> 
+This benchmark measures the time spent creating and joining threads.
+Performance is measured in fork-join operations per second.
+
+
+<P>
+Author: Lorna Smith, EPCC.  
+
+</P><H3 align="justify"><FONT color="#000000"><A name="barrier">Barrier</A></FONT></H3> 
+This measures the performance of barrier synchronisation. Performance is
+measured in barrier operations per second. Two types of barriers have
+been implemented. The first of these uses a shared
+counter. When a thread calls the barrier routine the counter is
+incremented. The thread then calls the <CODE> wait() </CODE>  method.  When the final
+thread enters the barrier, the counter is incremented and <CODE> notifyAll() </CODE>
+called, signalling all the other threads. 
+
+The second of these is a static 4-way tournament barrier.  This is a
+lock-free barrier, whose correctness cannot be formally guaranteed
+under the current, somewhat ambiguous, specification of the Java
+memory model. However, we have observed no such problems in
+practice. This barrier is used where barrier synchronisation is
+required in Sections II and III of the suite.
+
+<P>
+Author: Lorna Smith, EPCC.  
+
+</P><H3 align="justify"><FONT color="#000000"><A name="sync">Sync</A></FONT></H3> 
+
+This benchmark measures the performance of synchronized methods and
+synchronized blocks.  Performance is measured in synchronisations per
+second. The Method benchmark in the serial suite measures the
+performance of synchronized methods on a single thread: Here we
+measure the performance on multiple threads, where there is guaranteed
+to be contention for the object locks. 
+
+
+<P>
+Author: Lorna Smith, EPCC. 
+
+
+
+
+
+&nbsp;
+
+<TABLE width="100%" cellpadding="0" border="0">
+<TBODY><TR>
+<TD bgcolor="#3300cc"><IMG width="100" height="2" src="./Section 1 - Low Level Operations_files/tr2x2(1).gif"></TD>
+</TR>
+<TR>
+<TD>
+<A href="http://www.epcc.ed.ac.uk/">
+<IMG border="0" src="./Section 1 - Low Level Operations_files/epcc-small.gif" align="right">
+</A>
+<FONT size="3" face="Futura,Arial,Helvetica" color="#a51042">
+Webpage maintained by
+<I><A href="mailto:www@epcc.ed.ac.uk">www@epcc.ed.ac.uk</A></I>
+</FONT>
+</TD>
+</TR>
+<TR>
+<TD bgcolor="#3300cc"><IMG width="2" height="2" src="./Section 1 - Low Level Operations_files/tr2x2(1).gif"></TD>
+</TR>
+</TBODY></TABLE>
+
+
+
+
+
+</P></BODY></HTML>

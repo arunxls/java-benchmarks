@@ -1,0 +1,243 @@
+
+<!-- saved from url=(0099)http://www2.epcc.ed.ac.uk/computing/research_activities/java_grande/threads/s2contents.html#fourier -->
+<HTML><HEAD><META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<TITLE>JavaG Benchmarking</TITLE>
+
+<!-- BEGIN HEADER epcc-1 -->
+</HEAD><BODY bgcolor="#ffffff" text="#313592" vlink="#e2465a" background="./Section 2 - Kernels_files/backg1.jpg">
+
+<TABLE width="100%" cellpadding="0" cellspacing="0" border="0">
+<TBODY><TR>
+<TD align="left" valign="bottom">
+<A href="http://www.epcc.ed.ac.uk/">
+<IMG border="0" src="./Section 2 - Kernels_files/epcc.gif"></A>
+</TD>
+<TD align="right" valign="bottom">
+<FONT size="6" face="Futura,Arial,Helvetica" color="#a51042"><B>
+
+The Java Grande Forum Benchmark Suite
+
+</B></FONT>
+</TD>
+</TR>
+<TR>
+<TD colspan="2" bgcolor="#3300cc">
+<IMG width="2" height="2" src="./Section 2 - Kernels_files/tr2x2.gif"></TD>
+</TR>
+</TBODY></TABLE>
+
+<!-- END HEADER epcc-1 -->
+<!-- BEGIN NAVIGATE -->
+<CENTER><FONT size="3">
+[<A href="http://www.epcc.ed.ac.uk/javagrande">Java Grande Benchmarking</A>]
+[<A href="http://www.epcc.ed.ac.uk/research">Research at EPCC</A>]
+</FONT></CENTER><BR>
+<!-- END NAVIGATE -->
+
+
+<H1><FONT color="#000000">Section 2: Kernels</FONT></H1>
+
+The Section 2 benchmarks are chosen to be short codes containing the
+type of computation likely to be found in Grande applications. For
+each benchmark, a small (size A), medium (size B), and large (size C)
+version is supplied.  For each benchmark the time taken and a
+performance in operations per second (where the units are
+benchmark-specific) are reported.
+
+
+<H3 align="justify"><FONT color="#000000"><A name="series">Series</A></FONT></H3> 
+
+This benchmark computes the first N fourier coefficients of the function 
+f(x) = (x+1)^x on the interval 0,2. Performance units are coefficients per
+second. This benchmark heavily exercises transcendental and  trigonometric
+functions. <P>
+The most time consuming component of the benchmark is the loop
+over the Fourier coefficients.   Each iteration of the loop is
+independent of every other loop and the work may be distributed simply
+between the threads.  The work of this loop is divided evenly between
+the threads in a block fashion, with each thread responsible for
+updating the elements of its own block.</P><P>
+
+</P><CENTER> 
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 10,000</TD> </TR>
+<TR> <TD>  B </TD> <TD> 100,000</TD> </TR>
+<TR> <TD>  C </TD> <TD> 1,000,000 </TD> </TR>
+</TBODY></TABLE> 
+</CENTER> 
+<P>
+Source: <A href="http://www.igd.fhg.de/~zach/benchmarks/java-vs-c++.html">
+    Java/C++ Benchmark</A> 
+</P><P> 
+Author: Gabriel Zachmann, Fraunhofer Institute for Computer Graphics. 
+</P><P> 
+Adapted by: Mark Bull, EPCC.
+</P><P> 
+Multithreaded version by: Lorna Smith, EPCC. 
+
+
+</P><H3 align="justify"><FONT color="#000000"><A name="lufact">LUFact</A></FONT></H3>
+
+Solves an N x N linear system using LU factorisation followed by a
+triangular solve. This is a Java version of the well known Linpack
+benchmark. Performance units are Mflops per second. Memory and
+floating point intensive.
+<P>
+The factorisation is the only part of
+the computation performed which is parallelised: the remainder is
+computed in serial. Iterations of the double loop over the trailing
+block of the matrix are independent and the work is divided between
+the threads in a block fashion.  Barrier synchronisation is required
+before and after the parallel loop.
+</P><P>
+
+</P><CENTER> 
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 500</TD> </TR>
+<TR> <TD>  B </TD> <TD> 1,000</TD> </TR>
+<TR> <TD>  C </TD> <TD> 2,000 </TD> </TR>
+</TBODY></TABLE> 
+</CENTER> 
+<P>
+Source: <A href="http://www.netlib.org/benchmark/linpackjava/">Linpack
+    Benchmark -- Java Version</A>
+</P><P> 
+Author: Reed Wade, University of Tennessee at Knoxville 
+</P><P>
+Adapted by: Mark Bull, EPCC.
+</P><P> 
+Multithreaded version by: Lorna Smith, EPCC. 
+
+</P><H3 align="justify"><FONT color="#000000"><A name="sor">SOR</A></FONT></H3>
+
+The SOR benchmark performs 100 iterations of successive over-relaxation on a NxN grid. 
+The performance reported is in iterations per second. 
+<P>
+This benchmark involves an
+outer loop over iterations and two inner loops, each looping over the
+grid.  In order to update elements of the principle array during each
+iteration, neighbouring elements of the array are required, including
+elements previously updated. Hence this benchmark is, in this form,
+inherently serial. To allow parallelisation to be carried out the
+algorithm has been modified to use a ``red-black'' ordering mechanism.
+This allows the loop over array rows to be parallelised, hence the
+outer loop over elements has been distributed between threads in a
+block manner. Only nearest neighbour synchronisation is required,
+rather than a full barrier.
+</P><P>
+</P><CENTER>
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 1000 </TD> </TR>
+<TR> <TD>  B </TD> <TD> 1500 </TD> </TR>
+<TR> <TD>  C </TD> <TD> 2000 </TD> </TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+Source: <A href="http://math.nist.gov/scimark/">SciMark Benchmarks</A>
+</P><P>
+Author: Roldan Pozo, NIST.
+</P><P>
+Adapted by: Lorna Smith, EPCC.
+</P><P>
+Multi-threaded version by:  Lorna Smith, EPCC.
+
+
+
+
+</P><H3 align="justify"><FONT color="#000000"><A name="crypt">Crypt</A></FONT></H3> 
+
+Crypt performs IDEA (International Data Encryption Algorithm)
+encryption and decryption on an array of N bytes. Performance units
+are bytes per second. Bit/byte operation intensive. 
+<P>
+This algorithm involves two
+principle loops, whose iterations are independent and are 
+divided between the threads in a block fashion.
+</P><P>
+</P><CENTER> 
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD> 3,000,000 </TD> </TR>
+<TR> <TD>  B </TD> <TD> 20,000,000 </TD> </TR>
+<TR> <TD>  C </TD> <TD> 50,000,000 </TD> </TR>
+</TBODY></TABLE> 
+</CENTER>
+<P>
+Source: <A href="http://www.igd.fhg.de/~zach/benchmarks/java-vs-c++.html">
+    Java/C++ Benchmark</A> 
+</P><P> 
+Author: Gabriel Zachmann, Fraunhofer Institute for Computer Graphics.
+</P><P>
+Adapted by: Mark Bull, EPCC. 
+</P><P>
+Multi-threaded version by:  Lorna Smith, EPCC.
+
+
+
+
+</P><H3 align="justify"><FONT color="#000000"><A name="sparse">SparseMatmult</A></FONT></H3>
+
+This uses an unstructured sparse matrix stored in compressed-row format with a
+prescribed sparsity structure. This kernel exercises indirection addressing and 
+non-regular memory references. A N x N sparse matrix is used for 200 iterations.
+<P>
+The principle computation involves an outer loop over
+iterations and an inner loop over the size of the principal arrays. The
+simplest parallelisation mechanism is to divided the loop over the
+array length between threads. 
+Parallelising this loop creates the potential for more than one 
+thread to up-date the same element of the result vector.
+To avoid this the non zero elements are sorted by their row value. The
+loop has then been parallelised by dividing the iterations into
+blocks, which are approximately equal, but adjusted to ensure that no
+row is access by more than one thread.
+</P><P>
+</P><CENTER>
+<TABLE border="1" cellspacing="0" cellpadding="4">
+<TBODY><TR align="center"> <TD> Size </TD> <TD> N </TD> </TR>
+<TR> <TD>  A </TD> <TD>     50000     </TD> </TR>
+<TR> <TD>  B </TD> <TD>     100000    </TD> </TR>
+<TR> <TD>  C </TD> <TD>     500000    </TD> </TR>
+</TBODY></TABLE>
+</CENTER>
+<P>
+Source: <A href="http://math.nist.gov/scimark/">SciMark Benchmarks</A>
+</P><P>
+Author: Roldan Pozo, NIST.
+</P><P>
+Adapted by: Lorna Smith, EPCC.
+</P><P>
+Multi-threaded version by:  Lorna Smith, EPCC.
+
+
+
+&nbsp;
+
+<TABLE width="100%" cellpadding="0" border="0">
+<TBODY><TR>
+<TD bgcolor="#3300cc"><IMG width="100" height="2" src="./Section 2 - Kernels_files/tr2x2(1).gif"></TD>
+</TR>
+<TR>
+<TD>
+<A href="http://www.epcc.ed.ac.uk/">
+<IMG border="0" src="./Section 2 - Kernels_files/epcc-small.gif" align="right">
+</A>
+<FONT size="3" face="Futura,Arial,Helvetica" color="#a51042">
+Webpage maintained by
+<I><A href="mailto:www@epcc.ed.ac.uk">www@epcc.ed.ac.uk</A></I>
+</FONT>
+</TD>
+</TR>
+<TR>
+<TD bgcolor="#3300cc"><IMG width="2" height="2" src="./Section 2 - Kernels_files/tr2x2(1).gif"></TD>
+</TR>
+</TBODY></TABLE>
+
+
+
+
+
+</P></BODY></HTML>
