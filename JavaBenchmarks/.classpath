@@ -5,6 +5,8 @@
 	<classpathentry kind="src" path="JavaGrande/threadv1.0/jgfutil"/>
 	<classpathentry kind="src" path="JavaGrande/threadv1.0/section1"/>
 	<classpathentry kind="src" path="JavaGrande/threadv1.0/section3"/>
+	<classpathentry kind="src" path="CalFuzzer_KSen"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jre6"/>
+	<classpathentry kind="lib" path="lib/servlet.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
